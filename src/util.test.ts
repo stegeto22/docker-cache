@@ -32,13 +32,13 @@ describe("Util", (): void => {
 
       const stdout = await util.execBashCommand(command, platform);
 
-      expect(core.info).nthCalledWith<[string]>(1, command);
-      expect(nodeUtil.promisify).lastCalledWith(exec);
+      expect(core.info).toHaveBeenNthCalledWith<[string]>(1, command);
+      expect(nodeUtil.promisify).toHaveBeenLastCalledWith(exec);
       const shell =
         platform === "win32"
           ? "C:\\Program Files\\Git\\bin\\bash.exe"
           : "/usr/bin/bash";
-      expect(execMock).lastCalledWith(command, { shell });
+      expect(execMock).toHaveBeenLastCalledWith(command, { shell });
       return stdout;
     };
 
@@ -54,8 +54,8 @@ describe("Util", (): void => {
         const stdout = await mockedExec(command, null, platform, output);
 
         expect(stdout).toBe(output.stdout);
-        expect(core.info).lastCalledWith(output.stdout);
-        expect(core.error).lastCalledWith(output.stderr);
+        expect(core.info).toHaveBeenLastCalledWith(output.stdout);
+        expect(core.error).toHaveBeenLastCalledWith(output.stderr);
       },
       {
         examples: [
@@ -81,7 +81,7 @@ describe("Util", (): void => {
         expect(stdout).toBe("");
         expect(core.info).toHaveBeenCalledTimes(1);
         expect(core.error).not.toHaveBeenCalled();
-        expect(core.setFailed).lastCalledWith(error);
+        expect(core.setFailed).toHaveBeenLastCalledWith(error);
       },
       {
         examples: [
