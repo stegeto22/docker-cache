@@ -18,3 +18,7 @@ build
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+megalinter-reports/
+
+node_modules/*

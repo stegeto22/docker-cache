@@ -1,8 +1,8 @@
 name: Test
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened, edited, synchronize]
   push:
     branches:
       - main
@@ -10,154 +10,18 @@ permissions: {}
 jobs:
   pre-commit:
     name: Run Pre-commit Hooks
-    runs-on: ubuntu-22.04
-    permissions:
-      checks: write # https://github.com/EnricoMi/publish-unit-test-result-action#permissions
-      contents: write # for pre-commit-action
+    runs-on: ubuntu-latest
+
     steps:
       - name: Check out repository.
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v6
+      - name: Setup node
+        uses: actions/setup-node@v6
         with:
-          fetch-depth: 0
-      - name: Get operating system name and version.
-        id: os
-        run: echo "IMAGE=$ImageOS" >>"$GITHUB_OUTPUT"
-      - name: Determine name of MegaLinter Docker image from pre-commit config.
-        id: megalinter
-        run: |
-          from os import environ
-          from re import compile
-
-          _MEGALINTER_ARGS_PATTERN = compile(
-              "args:\\s*&megalinter-args\\s*\\[--flavor,\\s*(?P<flavor>\\w+),"
-              "\\s*--release,\\s*(?P<release>v(\\d+\\.){2}\\d+)"
-          )
-          with open(".pre-commit-config.yaml", encoding="utf-8") as input_stream:
-              for line in input_stream:
-                  if match := _MEGALINTER_ARGS_PATTERN.search(line):
-                      break
-
-          flavor = match.group("flavor")
-          release = match.group("release")
-          docker_image = f"megalinter-{flavor}:{release}"
-          output_file = environ["GITHUB_OUTPUT"]
-          with open(output_file, "a", encoding="utf-8") as output_stream:
-              output_stream.write(f"DOCKER_IMAGE={docker_image}\n")
-        shell: python
-      - name: Cache Docker images.
-        uses: ./
-        with:
-          key: ${{ steps.megalinter.outputs.DOCKER_IMAGE }}
-          read-only: true
-      - name: Get Yarn cache directory.
-        id: yarn-cache
-        run: |
-          yarn_cache="$(yarn config get cacheFolder)"
-          echo "PATH=$yarn_cache" >>"$GITHUB_OUTPUT"
-      - name: Cache Yarn dependencies.
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        with:
-          path: ${{ steps.yarn-cache.outputs.PATH }}
-          key: >
-            yarn-${{ steps.os.outputs.IMAGE }}-${{ hashFiles(
-              '**/yarn.lock',
-              '.yarnrc.yml'
-            ) }}
-          restore-keys: yarn-${{ steps.os.outputs.IMAGE }}-
-      - name: Run pre-commit hooks.
-        uses: ScribeMD/pre-commit-action@832e026101148e0234fde20eecf91c08942ace4a # 0.9.127
-      - name: Publish test results to GitHub.
-        uses: EnricoMi/publish-unit-test-result-action@30eadd5010312f995f0d3b3cff7fe2984f69409e # v2.16.1
-        if: always()
-        with:
-          files: src/reports/jest/junit.xml
-          comment_mode: off
-  save-cache:
-    name: Save Cache
-    strategy:
-      matrix:
-        os:
-          - ubuntu-22.04
-          - windows-2022
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Check out repository.
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - name: Save Docker images.
-        uses: ./
-        with:
-          key: docker-cache-test-${{ matrix.os }}-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: Build one tagged and one dangling empty test Docker image.
-        run: |
-          if [[ "${{ matrix.os }}" =~ 'windows' ]]; then
-            DOCKERFILE='Dockerfile.windows'
-          else
-            DOCKERFILE='Dockerfile'
-          fi
-          docker build --tag empty . --file "$DOCKERFILE" # Dangling image
-          docker build --tag empty --no-cache . --file "$DOCKERFILE" # Tagged image
-        shell: bash
-  restore-cache:
-    name: Restore Cache
-    needs:
-      - save-cache
-    strategy:
-      matrix:
-        os:
-          - ubuntu-22.04
-          - windows-2022
-    runs-on: ${{ matrix.os }}
-    permissions:
-      actions: write # for cache deletion
-    steps:
-      - name: Check out repository.
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - name: Load Docker images.
-        uses: ./
-        with:
-          key: docker-cache-test-${{ matrix.os }}-${{github.run_id }}-${{ github.run_attempt }}
-      - name: Verify Docker loaded both empty images from cache.
-        run: |
-          function emptyImageExists() {
-            id="$(docker images --quiet --filter "label=description=empty image" "$@")"
-            [[ -n "$id" ]]
-          }
-          emptyImageExists empty
-          emptyImageExists --filter "dangling=true"
-
-        shell: bash
-      - name: Delete test cache if permitted (i.e., workflow not triggered from fork).
-        if: always()
-        run: >
-          curl
-          --fail-with-body
-          --silent
-          --show-error
-          --request DELETE
-          --header 'Accept: application/vnd.github.v3+json'
-          --header 'Authorization: Bearer ${{ github.token }}'
-          "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/caches?key=docker-cache-test-${{
-            matrix.os
-          }}-${{
-            github.run_id
-          }}-${{
-            github.run_attempt
-          }}&ref=$GITHUB_REF" ||
-          (( $? == 22 ))
-        shell: bash
-  notify:
-    name: Notify
-    if: always()
-    needs:
-      - pre-commit
-      - save-cache
-      - restore-cache
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Send Slack notification with workflow result.
-        uses: ScribeMD/slack-templates@bea126c3915616204196f29d27d6ab9526d61a25 # 0.6.37
-        with:
-          bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
-          channel-id: ${{ secrets.SLACK_ACTIONS_CHANNEL_ID }}
-          template: result
-          results: "${{ join(needs.*.result, ' ') }}"
+          node-version: 20
+      - name: clean install
+        run: npm ci
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm test
