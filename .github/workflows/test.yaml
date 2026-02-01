@@ -9,7 +9,7 @@ on:
 permissions: {}
 jobs:
   pre-commit:
-    name: Run Pre-commit Hooks
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -20,9 +20,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 20
+
       - name: clean install
-        run: npm ci
-        run: yarn install
+        run: |
+          npm ci
+          yarn install
 
       - name: build
         run: npm run build
