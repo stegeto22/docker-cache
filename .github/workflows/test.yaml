@@ -31,4 +31,4 @@ jobs:
           yarn run build:post
 
       - name: test
-        run: yarn test
+        run: yarn test --verbose
