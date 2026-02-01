@@ -1258,10 +1258,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/strictest@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@tsconfig/strictest@npm:2.0.3"
-  checksum: 10c0/a26be4aed831c59b6b362608f34c6f0b2427dc08031176d825e46079090b9e48aa5ff71647b762a9a7009cb898af9b6cd24a195d268e9486fffa93de99de08c6
+"@tsconfig/strictest@npm:2.0.8":
+  version: 2.0.8
+  resolution: "@tsconfig/strictest@npm:2.0.8"
+  checksum: 10c0/96d7f1c6988c284886e7f2caea87415a6ebc779dc24c3f102cfa83b7d924da1363176b09c4600d11a1205bf2d819f35515c542a4bbcbe2fe13c1d7833376d203
   languageName: node
   linkType: hard
 
@@ -2495,7 +2495,7 @@ __metadata:
     "@jest/globals": "npm:30.2.0"
     "@jest/types": "npm:30.2.0"
     "@tsconfig/node22": "npm:22.0.0"
-    "@tsconfig/strictest": "npm:2.0.3"
+    "@tsconfig/strictest": "npm:2.0.8"
     "@types/eslint": "npm:8.56.6"
     "@types/jest": "npm:30.0.0"
     "@types/node": "npm:24.10.9"
