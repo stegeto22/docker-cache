@@ -2527,7 +2527,7 @@ __metadata:
     "@yarnpkg/sdks": "npm:3.2.3"
     eslint: "npm:9.39.2"
     eslint-config-prettier: "npm:10.1.8"
-    fast-check: "npm:3.16.0"
+    fast-check: "npm:3.23.2"
     jest: "npm:30.2.0"
     jest-junit: "npm:16.0.0"
     jest-mock: "npm:30.2.0"
@@ -2895,12 +2895,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-check@npm:3.16.0, fast-check@npm:^3.0.0":
-  version: 3.16.0
-  resolution: "fast-check@npm:3.16.0"
+"fast-check@npm:3.23.2, fast-check@npm:^3.0.0":
+  version: 3.23.2
+  resolution: "fast-check@npm:3.23.2"
   dependencies:
-    pure-rand: "npm:^6.0.0"
-  checksum: 10c0/8949f246e8a3f1f7e5f1f69e48e9086408f4f4b7ad3d23b2fdb3da8ab17a8d962926797f045a455d8ca5f5d925f0ebe1c762ba803e1ea53eba389373e1c3cfe8
+    pure-rand: "npm:^6.1.0"
+  checksum: 10c0/16fcff3c80321ee765e23c3aebd0f6427f175c9c6c1753104ec658970162365dc2d56bda046d815e8f2e90634c07ba7d6f0bcfd327fbd576d98c56a18a9765ed
   languageName: node
   linkType: hard
 
@@ -4845,7 +4845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pure-rand@npm:^6.0.0":
+"pure-rand@npm:^6.1.0":
   version: 6.1.0
   resolution: "pure-rand@npm:6.1.0"
   checksum: 10c0/1abe217897bf74dcb3a0c9aba3555fe975023147b48db540aa2faf507aee91c03bf54f6aef0eb2bf59cc259a16d06b28eca37f0dc426d94f4692aeff02fb0e65
