@@ -1281,10 +1281,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node20@npm:20.1.2":
-  version: 20.1.2
-  resolution: "@tsconfig/node20@npm:20.1.2"
-  checksum: 10c0/e438fa9b93f0e6ea667affbbd3217692bf3f92db1b3dcbfba1dd141a7dbcd647c19ed87ce76871c723bed398759ec4a5590685f3e669b600c9371f143a19e0c1
+"@tsconfig/node20@npm:20.1.8":
+  version: 20.1.8
+  resolution: "@tsconfig/node20@npm:20.1.8"
+  checksum: 10c0/5a9fcc0234e639c26f36f01d5912a59c47964361e9b9a8981a10806553799441f929474aed71cdec0ce5464ad1d757698df1651ac94cd55bb6bc01601a6003ea
   languageName: node
   linkType: hard
 
@@ -2531,7 +2531,7 @@ __metadata:
     "@fast-check/jest": "npm:1.8.0"
     "@jest/globals": "npm:30.2.0"
     "@jest/types": "npm:30.2.0"
-    "@tsconfig/node20": "npm:20.1.2"
+    "@tsconfig/node20": "npm:20.1.8"
     "@tsconfig/strictest": "npm:2.0.3"
     "@types/eslint": "npm:8.56.6"
     "@types/jest": "npm:30.0.0"
