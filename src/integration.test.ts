@@ -104,15 +104,15 @@ describe("Integration Test", (): void => {
     command: string,
     output: ConsoleOutput,
   ): void => {
-    expect(core.info).nthCalledWith<[string]>(infoCallNum, command);
-    expect(nodeUtil.promisify).nthCalledWith<[typeof exec]>(execCallNum, exec);
-    expect(execMock).nthCalledWith<[string, ExecOptions]>(
+    expect(core.info).toHaveBeenNthCalledWith<[string]>(infoCallNum, command);
+    expect(nodeUtil.promisify).toHaveBeenNthCalledWith<[typeof exec]>(execCallNum, exec);
+    expect(execMock).toHaveBeenNthCalledWith<[string, ExecOptions]>(
       execCallNum,
       command,
       EXEC_OPTIONS,
     );
-    expect(core.info).nthCalledWith<[string]>(infoCallNum + 1, output.stdout);
-    expect(core.error).nthCalledWith<[string]>(execCallNum, output.stderr);
+    expect(core.info).toHaveBeenNthCalledWith<[string]>(infoCallNum + 1, output.stdout);
+    expect(core.error).toHaveBeenNthCalledWith<[string]>(execCallNum, output.stderr);
     expect(core.setFailed).not.toHaveBeenCalled();
   };
 
@@ -121,15 +121,15 @@ describe("Integration Test", (): void => {
     listStderr: string,
     loadOutput: ConsoleOutput,
   ): void => {
-    expect(core.getInput).nthCalledWith<[string, InputOptions]>(1, "key", {
+    expect(core.getInput).toHaveBeenNthCalledWith<[string, InputOptions]>(1, "key", {
       required: true,
     });
-    expect(core.setOutput).lastCalledWith(docker.CACHE_HIT, cacheHit);
+    expect(core.setOutput).toHaveBeenLastCalledWith(docker.CACHE_HIT, cacheHit);
     if (cacheHit) {
       assertExecBashCommand(1, 1, loadCommand, loadOutput);
       expect(core.saveState).toHaveBeenCalledTimes(1);
     } else {
-      expect(core.info).nthCalledWith<[string]>(
+      expect(core.info).toHaveBeenNthCalledWith<[string]>(
         1,
         "Recording preexisting Docker images. These include standard images " +
           "pre-cached by GitHub Actions when Docker is run as root.",
@@ -141,7 +141,7 @@ describe("Integration Test", (): void => {
   };
 
   const assertSaveCacheHit = (key: string): void => {
-    expect(core.info).lastCalledWith(
+    expect(core.info).toHaveBeenLastCalledWith(
       `Cache hit occurred on the primary key ${key}, not saving cache.`,
     );
     expect(execMock).not.toHaveBeenCalled();
@@ -153,11 +153,11 @@ describe("Integration Test", (): void => {
     listStderr: string,
     saveOutput: ConsoleOutput,
   ): void => {
-    expect(core.getInput).lastCalledWith("read-only");
-    expect(core.info).nthCalledWith<[string]>(1, "Listing Docker images.");
+    expect(core.getInput).toHaveBeenLastCalledWith("read-only");
+    expect(core.info).toHaveBeenNthCalledWith<[string]>(1, "Listing Docker images.");
     const listOutput = joinOutput(dockerImages, listStderr);
     assertExecBashCommand(2, 1, LIST_COMMAND, listOutput);
-    expect(core.info).nthCalledWith<[string]>(
+    expect(core.info).toHaveBeenNthCalledWith<[string]>(
       4,
       "Images present before restore step will be skipped; only new images " +
         "will be saved.",
@@ -172,7 +172,7 @@ describe("Integration Test", (): void => {
     listStderr: string,
     saveOutput: ConsoleOutput,
   ): void => {
-    expect(core.getInput).nthCalledWith<[string, InputOptions]>(1, "key", {
+    expect(core.getInput).toHaveBeenNthCalledWith<[string, InputOptions]>(1, "key", {
       required: true,
     });
     cacheHit
