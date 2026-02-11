@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "ignorePaths": [
+    ".yarn/sdks"
+  ],
   "labels": [
     "dependencies"
   ]
