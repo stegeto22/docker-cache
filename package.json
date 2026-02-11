@@ -21,7 +21,7 @@
   },
   "packageManager": "yarn@4.12.0",
   "dependencies": {
-    "@actions/cache": "3.2.2",
+    "@actions/cache": "6.0.0",
     "@actions/core": "3.0.0"
   },
   "devDependencies": {
