@@ -4,12 +4,12 @@ import { jest } from "@jest/globals";
 import { fullUnicodeString } from "fast-check";
 
 import { consoleOutput, platform } from "./arbitraries/util.js";
-import { utilFactory } from "./mocks/util.js";
+import { utilFactory, coreFactory } from "./mocks/util.js";
 
 import type { ConsoleOutput } from "./util.js";
 
 jest.unstable_mockModule("node:util", utilFactory);
-jest.mock("@actions/core");
+jest.unstable_mockModule("@actions/core", coreFactory);
 
 const nodeUtil = jest.mocked(await import("node:util"));
 const core = jest.mocked(await import("@actions/core"));
