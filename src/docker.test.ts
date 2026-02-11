@@ -9,9 +9,10 @@ import type { FunctionLike } from "jest-mock";
 
 import type { Util } from "../types/aliases.js";
 import type { execBashCommand } from "./util.js";
+import { cacheFactory, coreFactory } from "./mocks/util.js";
 
-jest.mock("@actions/cache");
-jest.mock("@actions/core");
+jest.unstable_mockModule("@actions/cache", cacheFactory);
+jest.unstable_mockModule("@actions/core", coreFactory);
 
 jest.unstable_mockModule(
   "./util.js",

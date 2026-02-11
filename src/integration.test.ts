@@ -4,7 +4,7 @@ import { jest } from "@jest/globals";
 import { fullUnicodeString } from "fast-check";
 
 import { consoleOutput } from "./arbitraries/util.js";
-import { utilFactory } from "./mocks/util.js";
+import { utilFactory, cacheFactory, coreFactory } from "./mocks/util.js";
 
 import type { ExecOptions } from "node:child_process";
 import type { InputOptions } from "@actions/core";
@@ -13,8 +13,8 @@ import type { Mock } from "jest-mock";
 import type { ConsoleOutput } from "./util.js";
 
 jest.unstable_mockModule("node:util", utilFactory);
-jest.mock("@actions/cache");
-jest.mock("@actions/core");
+jest.unstable_mockModule("@actions/cache", cacheFactory);
+jest.unstable_mockModule("@actions/core", coreFactory);
 
 const nodeUtil = jest.mocked(await import("node:util"));
 const cache = jest.mocked(await import("@actions/cache"));
